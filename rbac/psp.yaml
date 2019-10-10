@@ -1,0 +1,34 @@
+kind: PodSecurityPolicy 
+apiVersion: policy/v1beta1 
+metadata:
+  name: datadog-agent
+spec:
+  privileged: false
+  # Allow host ports for dsd / trace / logs intake
+  hostPorts:
+    - min: 8124
+      max: 8127
+  # Allow host PID for dogstatsd origin detection
+  hostPID: true
+  hostIPC: false
+  hostNetwork: false
+  # Allow hostPath for docker / process metrics
+  volumes:
+  - configMap
+  - downwardAPI
+  - emptyDir
+  - hostPath
+  - secret
+  seLinux:
+    rule: 'RunAsAny'
+  allowedFlexVolumes: []
+  defaultAddCapabilities: []
+  fsGroup:
+    rule: 'RunAsAny'
+  readOnlyRootFilesystem: false
+  runAsUser:
+    rule: 'RunAsAny'
+  supplementalGroups:
+    rule: 'RunAsAny'
+  requiredDropCapabilities: []
+  allowedCapabilities: []
